@@ -39,7 +39,7 @@
     <!-- Slim CSS -->
     <link rel="stylesheet" href="~/AdminAssets/css/slim.css">
     <link rel="stylesheet" href="~/AdminAssets/css/slim.css">
-
+    @await RenderSectionAsync("Styles", required:false)
   </head>
   <body>
     <div class="slim-header">
@@ -264,5 +264,6 @@
     <script src="~/AdminAssets/js/ResizeSensor.js"></script>
     <script src="~/AdminAssets/js/dashboard.js"></script>
     <script src="~/AdminAssets/js/slim.js"></script>
+    @await RenderSectionAsync("Script", required:false)
   </body>
 </html>

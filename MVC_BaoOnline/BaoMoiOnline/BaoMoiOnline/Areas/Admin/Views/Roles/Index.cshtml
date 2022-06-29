@@ -1,5 +1,4 @@
-﻿@using PagedList.Core.Mvc
-@model PagedList.Core.IPagedList<BaoMoiOnline.Models.Role>
+﻿@model IEnumerable<BaoMoiOnline.Models.Role>
 
 @{
     ViewData["Title"] = "QUẢN LÝ QUYỀN TRUY CẬP";
@@ -49,8 +48,3 @@
     </table>
 </div><!-- table-responsive -->
 <hr />
-@*<div aria-label="Page navigation example">
-    <ul class="pagination">
-        <pager class="pager-container" options="@PagedListRenderOptions.Bootstrap4PageNumbersOnly" list="@Model" asp-area="Admin" asp-controller="Roles" asp-action="Index" />
-    </ul>
-</div>*@

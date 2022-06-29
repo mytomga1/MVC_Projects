@@ -1,0 +1,178 @@
+﻿@model BaoMoiOnline.Models.Post
+
+@{
+    ViewData["Title"] = "Thêm Mới Bài Viết";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@*@section Styles {
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"/>
+    <link href="~/AdminAssets/lib/select2/css/select2.min.css" rel="stylesheet"/>
+}*@
+
+<div class="slim-pageheader">
+    <ol class="breadcrumb slim-breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Posts" asp-action="Index">Quản Lý Bài Viết</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Thêm Mới Bài Viết</li>
+    </ol>
+    <h6 class="slim-pagetitle">THÊM MỚI BÀI VIẾT</h6>
+</div><!-- slim-pageheader -->
+<hr />
+
+<div class="section-wrapper">
+    <div class="form-layout">
+        <form asp-area="Admin" asp-controller="Posts" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="row mg-b-25">
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">Tiêu Đề : <span class="tx-danger"> *</span></label>
+                        <input class="form-control" type="text" name="Title" asp-for="Title" placeholder="Nhập Tiêu Đề Bài Viết">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">Miêu tả nội dụng ngắn gọn:</label>
+                        <input class="form-control" type="text" name="ShortContents" asp-for="ShortContents" maxlength="255" placeholder="Miêu tả nội dụng ngắn gọn">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-6">
+                    <div class="form-group mg-b-10-force">
+                        <label class="form-control-label">Danh mục :<span class="tx-danger"> *</span></label>
+                        <select class="form-control select2" asp-for="CatId" asp-items="@ViewBag.DanhMuc" required>
+                            <option label="DANH MỤC"></option>
+                        </select>
+                    </div>
+                </div><!-- col-4 -->
+
+                <div class="col-lg-6 mg-t-40 mg-lg-t-0">
+                    <label class="form-control-label">Ảnh bài Viết :</label>
+                    <div class="mg-t-8">                        
+                        <input name="fImg" type="file" asp-for="Img" class="form-control-file">
+                    </div>
+                    <!-- custom-file -->
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">Tags :</label>
+                        <input class="form-control" type="text" name="Tag" asp-for="Tag" placeholder="Nhập Tag Bài Viết">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">MetaKey :</label>
+                        <input class="form-control" type="text" name="Tag" asp-for="Cat.MetaKey" placeholder="Nhập MetaKey">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">MetaDesc :</label>
+                        <input class="form-control" type="text" name="Tag" asp-for="Cat.MetaDesc" placeholder="Nhập MetaDesc">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group mg-b-10-force">
+                        <label class="form-control-label">Nội Dung Bài Viết : <span class="tx-danger"> *</span></label>
+                        <textarea asp-for="Contents"></textarea>
+                    </div>
+                </div><!-- col-12 -->
+
+                @*<div class="col-lg-6">
+                    <div class="form-group mg-b-10-force">
+                        <input type="checkbox" asp-for="IsHost" class="form-control" />
+                    </div>    
+                </div>*@
+                
+            </div><!-- row -->
+
+            <div class="form-layout-footer">
+                <button class="btn btn-primary bd-0">Tạo mới</button>
+                <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="btn btn-secondary bd-0">Quay lại </a>
+            </div>
+
+        </form>
+    </div><!-- form-layout -->
+</div><!-- section-wrapper -->
+
+
+@*<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShortContents" class="control-label"></label>
+                <input asp-for="ShortContents" class="form-control" />
+                <span asp-validation-for="ShortContents" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contents" class="control-label"></label>
+                <input asp-for="Contents" class="form-control" />
+                <span asp-validation-for="Contents" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Img" class="control-label"></label>
+                <input asp-for="Img" class="form-control" />
+                <span asp-validation-for="Img" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Alias" class="control-label"></label>
+                <input asp-for="Alias" class="form-control" />
+                <span asp-validation-for="Alias" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreateDate" class="control-label"></label>
+                <input asp-for="CreateDate" class="form-control" />
+                <span asp-validation-for="CreateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccountId" class="control-label"></label>
+                <select asp-for="AccountId" class ="form-control" asp-items="ViewBag.AccountId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tag" class="control-label"></label>
+                <input asp-for="Tag" class="form-control" />
+                <span asp-validation-for="Tag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CatId" class="control-label"></label>
+                <select asp-for="CatId" class ="form-control" asp-items="ViewBag.CatId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsHost" class="control-label"></label>
+                <input asp-for="IsHost" class="form-control" />
+                <span asp-validation-for="IsHost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsNewfeed" class="control-label"></label>
+                <input asp-for="IsNewfeed" class="form-control" />
+                <span asp-validation-for="IsNewfeed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+
