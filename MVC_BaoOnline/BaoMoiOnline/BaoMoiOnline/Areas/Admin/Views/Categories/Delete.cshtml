@@ -1,0 +1,54 @@
+﻿@model BaoMoiOnline.Models.Category
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="slim-pageheader">
+    <ol class="breadcrumb slim-breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Quản Lý Danh Mục</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Xoá Danh Mục</li>
+    </ol>
+    <h6 class="slim-pagetitle">XÁC NHẬN XOÁ</h6>
+</div><!-- slim-pageheader -->
+<hr />
+
+
+<div class="section-wrapper mg-t-20">
+    <h4>Bạn Chắc Muốn Xoá Chứ ?</h4>
+    <br />
+    <form asp-area="Admin" asp-controller="Roles" asp-action="Delete" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="CatId" />
+        <div class="form-layout form-layout-6">
+            <div class="row no-gutters">
+                <div class="col-5 col-sm-4">
+                    ID:
+                </div><!-- col-4 -->
+                <div class="col-7 col-sm-8">
+                    <input class="form-control" type="text" asp-for="CatId">
+                    <span asp-validation-for="CatId" class="text-danger"></span>
+                </div><!-- col-8 -->
+            </div><!-- row -->
+            <div class="row no-gutters">
+                <div class="col-5 col-sm-4">
+                    Tên Danh Mục:
+                </div><!-- col-4 -->
+                <div class="col-7 col-sm-8">
+                    <input class="form-control" type="text" asp-for="CatName">
+                    <span asp-validation-for="CatName" class="text-danger"></span>
+                </div><!-- col-8 -->
+
+            </div><!-- row -->
+
+            <div class="form-layout-footer mg-t-30">
+                <div class="form-group">
+                    <input type="submit" value="Xoá" class="btn btn-danger" />
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-secondary bd-0">Quay lại </a>
+                </div>
+            </div><!-- row -->
+        </div><!-- form-layout -->
+    </form>
+</div><!-- section-wrapper -->
