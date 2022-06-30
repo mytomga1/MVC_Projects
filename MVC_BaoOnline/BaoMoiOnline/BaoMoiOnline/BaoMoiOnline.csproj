@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\AdminAssets\lib\echarts\extension\" />
     <Folder Include="wwwroot\AdminAssets\lib\summernote\lang\" />
     <Folder Include="wwwroot\images\cover\" />
