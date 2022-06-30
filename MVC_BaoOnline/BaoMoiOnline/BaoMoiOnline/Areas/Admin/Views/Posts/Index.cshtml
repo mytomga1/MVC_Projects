@@ -52,12 +52,11 @@
                         }
                     </td>
 
-
                     <td>                       
 
                         <a asp-area="Admin" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.PostId" class="btn btn-success">Chỉnh Sửa</a>
-                        <a href="@url" target="_blank" class="btn btn-primary">Chi Tiết</a>
-                        @*<a asp-area="Admin" asp-controller="Posts" asp-action="Details" asp-route-id="@item.PostId" class="btn btn-primary">Chi Tiết</a>*@
+                        @*<a href="@url" target="_blank" class="btn btn-primary">Chi Tiết</a>*@
+                        <a asp-area="Admin" asp-controller="Posts" asp-action="Details" asp-route-id="@item.PostId" class="btn btn-primary">Chi Tiết</a>
                         <a asp-area="Admin" asp-controller="Posts" asp-action="Delete" asp-route-id="@item.PostId" class="btn btn-danger">Xoá</a>
 
                     </td>

@@ -151,7 +151,7 @@ namespace BaoOnline.Helpers
             return value.Substring(value.Length - lenght);
         }
 
-        public static int PAGE_SIZE = 2; // mục đích phân trang VD 1trang có 20 bài
+        public static int PAGE_SIZE = 20; // mục đích phân trang VD 1trang có 20 bài
 
         public static string SEOUrl(string url)
         {
