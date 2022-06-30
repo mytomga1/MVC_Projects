@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BaoMoiOnline.Models;
+using BaoOnline.Helpers;
+using PagedList.Core;
 
 namespace BaoMoiOnline.Areas.Admin.Controllers
 {
@@ -20,10 +22,19 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
         }
 
         // GET: Admin/Accounts
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int? page)
         {
-            var baoOnlineContext = _context.Accounts.Include(a => a.Role);
-            return View(await baoOnlineContext.ToListAsync());
+
+            var pageNumber = page == null || page <= 0 ? 1 : page.Value;// nếu page bằng null thì gắng giá trị bằng 1, còn ko thì giá trị = value
+            var pageSize = Utilities.PAGE_SIZE;// PAGE_SIZE ở thư mục Utilities dc gán giá trị sẳn là 20
+            var lsAccounts = _context.Accounts
+                .Include(a => a.Role).OrderByDescending(x => x.CreatedDate);
+
+            // gọi sử dụng thư viện PagedList
+            PagedList<Account> models = new PagedList<Account>(lsAccounts, pageNumber, pageSize);
+
+            //ViewBag.CurrentPage = pageNumber;
+            return View(models);
         }
 
         // GET: Admin/Accounts/Details/5

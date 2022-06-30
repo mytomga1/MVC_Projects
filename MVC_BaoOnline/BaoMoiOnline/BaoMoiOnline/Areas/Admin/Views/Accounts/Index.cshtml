@@ -1,84 +1,69 @@
-﻿@model IEnumerable<BaoMoiOnline.Models.Account>
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<BaoMoiOnline.Models.Account>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản Lý Tài Khoản";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
+<div class="slim-pageheader">
+    <ol class="breadcrumb slim-breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Accounts" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Quản Lý Tài Khoản</li>
+    </ol>
+    <h6 class="slim-pagetitle">QUẢN LÝ TÀI KHOẢN</h6>
+</div><!-- slim-pageheader -->
+<hr />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<a asp-area="Admin" asp-controller="Accounts" asp-action="Create" class="btn btn-outline-pink mg-b-10">Thêm Tài Khoản Mới</a>
+<table class="table mg-b-0 table-colored table-primary">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Salt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Active)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastLogin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Role)
-            </th>
-            <th></th>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Quyền Truy Cập</th>
+            <th>TRẠNG THÁI</th>
+            <th>ACTION</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Salt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Active)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role.RoleId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AccountId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AccountId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AccountId">Delete</a>
-            </td>
-        </tr>
-}
+        @if (Model != null && Model.Count() > 0)
+        {
+            @foreach (var item in Model)
+            {                
+                <tr>
+                    <th>@item.AccountId</th>
+                    <th>@item.Email</th>
+                   
+                    <th>@item.Role.RoleName</th>
+                    <td>
+                        @if (item.Active == true)
+                        {
+                            <span class="badge badge-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-secondary">Khoá</span>
+                        }
+                    </td>
+
+                    <td>                       
+
+                        <a asp-area="Admin" asp-controller="Accounts" asp-action="Edit" asp-route-id="@item.AccountId" class="btn btn-success">Chỉnh Sửa</a>
+                        @*<a href="@url" target="_blank" class="btn btn-primary">Chi Tiết</a>*@
+                        <a asp-area="Admin" asp-controller="Accounts" asp-action="Details" asp-route-id="@item.AccountId" class="btn btn-primary">Chi Tiết</a>
+                        <a asp-area="Admin" asp-controller="Accounts" asp-action="Delete" asp-route-id="@item.AccountId" class="btn btn-danger">Xoá</a>
+
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
+<hr />
+
+<div aria-label="Page navigation example">
+    <ul class="pagination">
+        <pager class="pager-container" options="@PagedListRenderOptions.Bootstrap4PageNumbersOnly" list="@Model" asp-area="Admin" asp-controller="Accounts" asp-action="Index" />
+    </ul>
+</div>

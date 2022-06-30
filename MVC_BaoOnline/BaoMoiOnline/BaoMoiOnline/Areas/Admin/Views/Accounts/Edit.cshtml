@@ -1,14 +1,20 @@
 ﻿@model BaoMoiOnline.Models.Account
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Cập Nhật Thông Tin Tài Khoản";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Account</h4>
+<div class="slim-pageheader">
+    <ol class="breadcrumb slim-breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Accounts" asp-action="Index">Quản Lý Tài Khoản</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cập Nhật Thông Tin Tài Khoản</li>
+    </ol>
+    <h6 class="slim-pagetitle">CẬP NHẬT THÔNG TIN TÀI KHOẢN</h6>
+</div><!-- slim-pageheader -->
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
