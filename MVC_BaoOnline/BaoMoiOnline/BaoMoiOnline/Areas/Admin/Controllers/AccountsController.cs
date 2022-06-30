@@ -12,6 +12,8 @@ using BaoOnline.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using BaoMoiOnline.Areas.Admin.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BaoMoiOnline.Areas.Admin.Controllers
 {
@@ -57,47 +59,73 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //[Route("dang-nhap.html", Name = "Login")]
-        //public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-        //{
-        //    try {
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("dang-nhap.html", Name = "Login")]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        {
+            try
+            {
+                if (ModelState.IsValid) // nếu email/pass ko đúng thì chạy câu lệnh if
+                {
+                    Account kh = _context.Accounts
+                        .Include(p => p.Role)
+                        .SingleOrDefault(p => p.Email.ToLower() == model.Email.ToLower().Trim());
 
-        //        if (ModelState.IsValid) {
+                    if (kh == null) // nếu đốn kh trên ko lấy dc thông tin tài khoản thì đẩy lỗi phía dưới
+                    {
+                        ViewBag.Error = "Thông tin đăng nhập chưa chính xác";
+                        return View(model);
+                    }
 
-        //            Account kh = _context.Accounts
-        //                .Include(p => p.Role)
-        //                .SingleOrDefault(p => p.Email.ToLower() == model.Email.ToLower().Trim());
-        //            if (kh != null) {
+                    string pass = (model.Password.Trim() + kh.Salt.Trim()).toMD5(); // lấy và xữ lý giải mã pass
+                    if (kh.Password.Trim() != pass)
+                    {
 
-        //                ViewBag.Error = "Thông tin đăng nhập chưa chính xác";
-        //                return View(model);
-        //            }
-        //            string pass = (model.Password.Trim() + kh.Salt.Trim()).ToMD5();
-        //            if (kh.Password.Trim() != pass)
-        //            {
+                        ViewBag.Error = "Thông tin đăng nhập chưa chính xác";
+                        return View(model);
+                    }
+                    // Đăng Nhập Thành Công
 
-        //                ViewBag.Error = "Thông tin đăng nhập chưa chính xác";
-        //                return View(model);
-        //            }
-        //            // Đăng Nhập Thành Công
+                    //Ghi nhận thời gian đăng nhập
+                    kh.LastLogin = DateTime.Now;
+                    _context.Update(kh);
+                    await _context.SaveChangesAsync();
 
-        //            //Ghi nhận thời gian đăng nhập
-        //            kh.LastLogin = DateTime.Now;
-        //            _context.Update(kh);
-        //            await _context.SaveChangesAsync();
+                    var taikhoanID = HttpContext.Session.GetString("AccountId");
+                    //Identity
+                    //Lưu Session MaKh
+                    HttpContext.Session.SetString("AccountId", kh.AccountId.ToString());
 
-        //            var taikhoanID = HttpContext.Session.GetString("AccountId");
-        //            //Identity
-        //            //Lưu Session MaKh
-        //            HttpContext.Session.SetString("AccountId", kh.AccountId.ToString());
+                    //Identity
+                    var userClain = new List<Claim> {
 
-        //            //Identity
-        //            var userClain = new List<Claim>
-        //        }
-        //    } catch { }
-        //}
+                        new Claim(ClaimTypes.Name, kh.FullName),
+                        new Claim(ClaimTypes.Email, kh.Email),
+                        new Claim("AccountId", kh.AccountId.ToString()),
+                        new Claim("RoleId", kh.RoleId.ToString()),
+                        new Claim(ClaimTypes.Role, kh.Role.RoleName)
+                    };
+
+                    var grandmaIdentity = new ClaimsIdentity(userClain, "User Identity");
+                    var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
+                    await HttpContext.SignInAsync(userPrincipal);
+
+                    //if (Url.IsLocalUrl(returnUrl)) {
+
+                    //    return Redirect(returnUrl);
+                    //}
+
+                    return RedirectToAction("Index", "Home", new { Areas = "Admin" });
+                }
+            }
+            catch {
+
+                return RedirectToAction("Login", "Accounts", new { Areas = "Admin" });
+            }
+
+            return RedirectToAction("Login", "Accounts", new { Areas = "Admin" });
+        }
 
         // GET: Admin/Accounts/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -134,6 +162,8 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                account.Password = HashMD5.CreateMD5(account.Password); // mã hoá pass
+                account.Salt = Utilities.GetRandomKey(); // tạo chuỗi ngẫu nhiên salt
                 _context.Add(account);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -174,7 +204,7 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                {                    
                     _context.Update(account);
                     await _context.SaveChangesAsync();
                 }
