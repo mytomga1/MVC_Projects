@@ -62,7 +62,7 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("dang-nhap.html", Name = "Login")]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model)//, string returnUrl = null)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
                         return View(model);
                     }
 
-                    string pass = (model.Password.Trim() + kh.Salt.Trim()).toMD5(); // lấy và xữ lý giải mã pass
+                    string pass = (model.Password.Trim() + kh.Salt.Trim()).toMD5(); // lấy pass của user nhập vào + với chuỗi salt rồi mã hoá đễ tí nữa so sánh
                     if (kh.Password.Trim() != pass)
                     {
 
@@ -162,8 +162,10 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                account.Password = HashMD5.CreateMD5(account.Password); // mã hoá pass
+                
                 account.Salt = Utilities.GetRandomKey(); // tạo chuỗi ngẫu nhiên salt
+                account.Password = HashMD5.toMD5(account.Password + account.Salt); // mã hoá pass ra MD5(pass+salt)
+
                 _context.Add(account);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -204,7 +206,7 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {                    
+                {                   
                     _context.Update(account);
                     await _context.SaveChangesAsync();
                 }
