@@ -18,31 +18,98 @@
 <div class="section-wrapper">
     <div class="form-layout">
         <form asp-area="Admin" asp-controller="Posts" asp-action="Edit" asp-route-id="@Model.PostId" method="post" enctype="multipart/form-data">
-            <input type="hidden" asp-for="PostId"/>
-            <input type="hidden" asp-for="CreateDate"/>
-            <input type="hidden" asp-for="Img"/>
-            <input type="hidden" asp-for="AccountId"/>
-            <input type="hidden" asp-for="Author"/>
-            <input type="hidden" asp-for="Alias"/>
-            <input type="hidden" asp-for="CreateDate"/>
+            <input type="hidden" asp-for="PostId" />
+            <input type="hidden" asp-for="CreateDate" />
+            <input type="hidden" asp-for="Img" />
+            <input type="hidden" asp-for="AccountId" />
+            <input type="hidden" asp-for="Author" />
+            <input type="hidden" asp-for="Alias" />
+            <input type="hidden" asp-for="CreateDate" />
             <div class="row mg-b-25">
 
-                <div class="col-lg-4">
+                <div class="col-lg-12">
                     <div class="form-group">
-                        <label class="form-control-label">Tên Danh Mục: <span class="tx-danger">*</span></label>
-                        <input class="form-control" type="text" name="CatName" asp-for="Title" placeholder="Nhập Tên Danh mục">
+                        <label class="form-control-label">Tiêu Đề : <span class="tx-danger"> *</span></label>
+                        <input class="form-control" type="text" name="Title" asp-for="Title" placeholder="Nhập Tiêu Đề Bài Viết">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">Miêu tả nội dụng ngắn gọn:</label>
+                        <input class="form-control" type="text" name="ShortContents" asp-for="ShortContents" maxlength="255" placeholder="Miêu tả nội dụng ngắn gọn">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-6">
+                    <div class="form-group mg-b-10-force">
+                        <label class="form-control-label">Danh mục :<span class="tx-danger"> *</span></label>
+                        <select class="form-control select2" asp-for="CatId" asp-items="@ViewBag.DanhMuc" required>
+                            <option label="DANH MỤC"></option>
+                        </select>
                     </div>
                 </div><!-- col-4 -->
 
-                         
-            </div><!-- row -->  
+                <div class="col-lg-6 mg-t-40 mg-lg-t-0">
+                    <label class="form-control-label">Ảnh bài Viết :</label>
+                    <div class="mg-t-8">
+                        <input name="fImg" type="file" asp-for="Img" class="form-control-file">
+                    </div>
+                    <!-- custom-file -->
+                </div>
 
-            <div class="form-layout-footer">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">Tags :</label>
+                        <input class="form-control" type="text" name="Tag" asp-for="Tag" placeholder="Nhập Tag Bài Viết">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">MetaKey :</label>
+                        <input class="form-control" type="text" name="Tag" asp-for="Cat.MetaKey" placeholder="Nhập MetaKey">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="form-control-label">MetaDesc :</label>
+                        <input class="form-control" type="text" name="Tag" asp-for="Cat.MetaDesc" placeholder="Nhập MetaDesc">
+                    </div>
+                </div><!-- col-12 -->
+
+                <div class="col-lg-12">
+                    <div class="form-group mg-b-10-force">
+                        <div class="mb-3">
+                            <label for="ContentsTextarea" class="form-label">Nội Dung Bài Viết: </label>
+                            <textarea class="form-control" asp-for="Contents" id="ContentsTextarea" rows="3" style="height: 300px;"></textarea>
+                        </div>
+                    </div>
+                </div><!-- col-12 -->
+
+
+                <div class="col-lg-6 mg-t-40 mg-lg-t-0">
+
+                    <p class="mg-b-10">More Options: </p>
+
+                    <div id="cbWrapper" class="parsley-checkbox">
+                        <label class="ckbox">
+                            <input type="checkbox" asp-for="IsHost"><span>Tin Nóng</span>
+                        </label>
+                        <label class="ckbox">
+                            <input type="checkbox" asp-for="IsNewfeed"><span>Tin Mới</span>
+                        </label>
+                    </div>
+                </div>
+
+
+            </div><!-- row -->
+
+            <div class="form-layout-footer" style="text-align:center !important">
                 <button class="btn btn-primary bd-0">Lưu Thay Đổi</button>
-                <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-secondary bd-0">Quay lại </a>
+                <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="btn btn-secondary bd-0">Quay lại </a>
             </div>
-
         </form>
     </div><!-- form-layout -->
 </div><!-- section-wrapper -->
-

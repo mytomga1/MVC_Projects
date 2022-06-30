@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BaoMoiOnline.Models;
 using BaoOnline.Helpers;
 using PagedList.Core;
+using System.IO;
 
 namespace BaoMoiOnline.Areas.Admin.Controllers
 {
@@ -34,9 +35,8 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;// nếu page bằng null thì gắng giá trị bằng 1, còn ko thì giá trị = value
             var pageSize = Utilities.PAGE_SIZE;// PAGE_SIZE ở thư mục Utilities dc gán giá trị sẳn là 20
             var lsPosts = _context.Posts
-                .Include(p => p.Account).Include(p => p.Cat)
-                .OrderByDescending(x => x.CatId); // sắp xếp theo CatId
-
+                .Include(p => p.Account).Include(p => p.Cat).OrderByDescending(b => b.PostId);
+                
             // gọi sử dụng thư viện PagedList
             PagedList<Post> models = new PagedList<Post>(lsPosts, pageNumber, pageSize);
 
@@ -77,10 +77,19 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,Title,ShortContents,Contents,Img,Alias,CreateDate,Author,AccountId,Tag,CatId,IsHost,IsNewfeed")] Post post)
+        public async Task<IActionResult> Create([Bind("PostId,Title,ShortContents,Contents,Img,Alias,CreateDate,Author,AccountId,Tag,CatId,IsHost,IsNewfeed")] Post post, Microsoft.AspNetCore.Http.IFormFile fImg)
         {
             if (ModelState.IsValid)
             {
+                post.Alias = Utilities.SEOUrl(post.Title);
+                if (fImg != null)
+                {
+
+                    string extension = Path.GetExtension(fImg.FileName);
+                    string Newname = Utilities.SEOUrl(post.Title) + "preview_" + extension;
+                    post.Img = await Utilities.UploadFile(fImg, @"posts\", Newname.ToLower());
+                }
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -113,7 +122,7 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,ShortContents,Contents,Img,Alias,CreateDate,Author,AccountId,Tag,CatId,IsHost,IsNewfeed")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,ShortContents,Contents,Img,Alias,CreateDate,Author,AccountId,Tag,CatId,IsHost,IsNewfeed")] Post post, Microsoft.AspNetCore.Http.IFormFile fImg)
         {
             if (id != post.PostId)
             {
@@ -124,6 +133,15 @@ namespace BaoMoiOnline.Areas.Admin.Controllers
             {
                 try
                 {
+                    post.Alias = Utilities.SEOUrl(post.Title);
+                    if (fImg != null)
+                    {
+
+                        string extension = Path.GetExtension(fImg.FileName);
+                        string Newname = Utilities.SEOUrl(post.Title) + "preview_" + extension;
+                        post.Img = await Utilities.UploadFile(fImg, @"posts\", Newname.ToLower());
+                    }
+
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }
